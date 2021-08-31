@@ -1,0 +1,4 @@
+webConfig: |
+  {
+    "endpoint": "${endpoint}"
+  }

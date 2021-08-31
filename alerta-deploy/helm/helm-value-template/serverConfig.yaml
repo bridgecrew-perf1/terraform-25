@@ -1,0 +1,40 @@
+serverConfig: |
+  AUTH_REQUIRED = True
+  CUSTOMER_VIEWS = False
+  ADMIN_USERS = ${ADMIN_USERS}
+
+  CORS_ORIGINS = [
+    r'http://localhost:[0-9]*',
+    r'https?://.*\.com\.cn'
+  ]
+
+  DASHBOARD_URL = '${DASHBOARD_URL}'
+  AMQP_URL = '${AMQP_URL}'
+
+  COLUMNS = ${COLUMNS}
+  COLOR_MAP = {
+    'severity': ${COLOR_MAP_severity},
+    'text': 'black'
+  }
+
+  ALLOWED_ENVIRONMENTS = ${ALLOWED_ENVIRONMENTS}
+  ASI_QUERIES = ${ASI_QUERIES}
+
+  SEVERITY_MAP = ${ SEVERITY_MAP}
+  DEFAULT_NORMAL_SEVERITY = 'info'
+  DEFAULT_PREVIOUS_SEVERITY = 'warning'
+
+  AUTH_PROVIDER = '${AUTH_PROVIDER}'
+  OIDC_ISSUER_URL = '${OIDC_ISSUER_URL}'
+  OAUTH2_CLIENT_ID = '${OAUTH2_CLIENT_ID}'
+  OAUTH2_CLIENT_SECRET = '${OAUTH2_CLIENT_SECRET}'
+
+  PLUGINS = ${PLUGINS}
+
+  DING_RULES = '/etc/alerta/ding/ding_rules.json'
+  DING_MD_TEMPLATE = '/etc/alerta/ding.md.j2'
+
+  MS_TEAMS_PAYLOAD = '/etc/alerta/example-payload.json.j2'
+  MS_TEAMS_PATH = '/etc/alerta/msteams.json'
+
+  DEBUG = True

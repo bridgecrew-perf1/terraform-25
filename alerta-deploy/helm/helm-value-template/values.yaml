@@ -1,0 +1,62 @@
+imagePullPolicy: ${image-PullPolicy}
+imagePullSecrets:
+  - name: ${image-PullSecrets}
+
+read:
+  autoscaling:
+    enabled: true
+  image:
+    repository: ${read-image-registry}
+    tag: ${read-image-tag}
+  route:
+    enabled: true
+    host: alerta-read.${okd-namespace}.apps.okd-${env}.com.cn
+    tls:
+      enabled: ${route-tls-enable}
+
+write:
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+  image:
+    repository: ${write-image-registry}
+    tag: ${write-image-tag}
+  route:
+    enabled: true
+    host: alerta-write.${okd-namespace}.apps.okd-${env}.com.cn
+    tls:
+      enabled: ${route-tls-enable}
+
+web:
+  autoscaling:
+    enabled: true
+  image:
+    repository: ${web-image-registry}
+    tag: ${web-image-tag}
+  route:
+    enabled: true
+    host: alerta-web.${okd-namespace}.apps.okd-${env}.com.cn
+    tls:
+      enabled: ${route-tls-enable}
+
+alertaAdminUsers: {}
+
+postgresql:
+  enabled: false
+externalPostgresql:
+  enabled: true
+  database: ${externalPostgresql_database}
+  username: ${externalPostgresql_username}
+  password: ${externalPostgresql_password}
+  url: ${externalPostgresql_url}
+
+
+
+tls:
+  insecureEdgeTerminationPolicy: ${tls-insecureEdgeTerminationPolicy}
+  termination: ${tls-termination}
+  ${tls-certificate}
+
+
+
+

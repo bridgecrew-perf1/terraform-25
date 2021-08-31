@@ -1,0 +1,17 @@
+mailerConfig: |
+  [default]
+  endpoint = ${endpoint}
+  rules_dir = /etc/alerta/mailer/mailer_rules.json
+  secret_key = ${secret_key}
+
+  [smtp-settings]
+  smtp_host = ${smtp_host}
+  smtp_port = ${smtp_port}
+  smtp_password = ${smtp_password}
+  smtp_starttls = ${smtp_starttls}
+  smtp_use_ssl = ${smtp_use_ssl}
+
+  [mail-settings]
+  mail_from = ${mail_from}
+  email_type = html
+  mail_html_template = /etc/alerta/email.html.j2
