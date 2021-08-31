@@ -1,0 +1,839 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 60,
+  "iteration": 1626168400728,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "ossLogService",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "MeteringStorageUtilization"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "标准存储(本地冗余)容量(MB)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "MeteringGetRequest"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "GET请求次数"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "putAndOrtherRequest"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PUT及其他类型请求次数"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "InternetSend"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "外网流出流量(MB)"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 11,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "currentPage": 1,
+          "logEntries": 2608,
+          "logsPerPage": 100,
+          "query": "BucketName: $project* |SELECT * , ( SELECT max(Value)/1024/1024 FROM log T1 WHERE T1.cms_metric = 'MeteringStorageUtilization'  and T1.BucketName=T0.BucketName ) AS \"MeteringStorageUtilization\" , ( SELECT sum(T2.Value) FROM log T2 WHERE T2.cms_metric = 'MeteringGetRequest' and T2.BucketName=T0.BucketName ) AS \"MeteringGetRequest\" , ( SELECT sum(T3.Value) FROM log T3 WHERE T3.cms_metric = 'MeteringPutRequest' and T3.BucketName=T0.BucketName ) AS putAndOrtherRequest , ( SELECT sum(T5.Value)/1024/1024 FROM log T5 WHERE T5.cms_metric = 'InternetSend' and T5.BucketName=T0.BucketName) AS \"InternetSend\" FROM ( SELECT DISTINCT BucketName FROM log ) T0 GROUP BY BucketName order by BucketName",
+          "refId": "A",
+          "target": "BucketName,MeteringStorageUtilization,MeteringGetRequest,putAndOrtherRequest,InternetSend",
+          "totalPages": 27,
+          "type": "table",
+          "ycol": "BucketName,MeteringStorageUtilization,MeteringGetRequest,putAndOrtherRequest,InternetSend"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "OSS",
+      "type": "table"
+    },
+    {
+      "datasource": "podLogService",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "memory"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": null
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 11,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "currentPage": 1,
+          "logEntries": 0,
+          "logsPerPage": 100,
+          "query": "container_name:$project*  | SELECT  namespace , container_name as name,cpu,memory, count(1) as count group by name, cpu, memory, namespace",
+          "refId": "A",
+          "target": "namespace,name,cpu,memory,count",
+          "totalPages": 0,
+          "type": "table",
+          "ycol": "namespace,name,cpu,memory,count"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "POD",
+      "type": "table"
+    },
+    {
+      "datasource": "slbLogService",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "loadBalancerSpec"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "实例规格"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "count1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "InstanceRent(用量)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "count2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "实例规格（用量）"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "traffic"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "NetworkOut (GB)"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Bandwidth"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 86
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "InternetChargeType"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "计费类型"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "InstanceRent(用量)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 141
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "实例规格（用量）"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 134
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "NetworkOut (GB)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 165
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PayType"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 122
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 0,
+        "y": 12
+      },
+      "id": 6,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "currentPage": 1,
+          "logEntries": 330,
+          "logsPerPage": 100,
+          "query": "loadBalancerName:$project*|  SELECT loadBalancerName AS name, PayType, InternetChargeType, Bandwidth, loadBalancerSpec , COUNT(1) AS count1, COUNT(1) AS count2 ,   round(sum(NetworkOut)/1024/1024/1024.0, 3) AS traffic   GROUP BY loadBalancerName, loadBalancerSpec, PayType, Bandwidth, InternetChargeType ORDER BY loadBalancerName",
+          "refId": "A",
+          "target": "name,PayType, InternetChargeType ,Bandwidth,loadBalancerSpec,count1,count2,traffic",
+          "totalPages": 4,
+          "type": "table",
+          "ycol": "name,PayType, InternetChargeType ,Bandwidth,loadBalancerSpec,count1,count2,traffic"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "SLB",
+      "type": "table"
+    },
+    {
+      "datasource": "rdsLogService",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dbinstancedescription"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Name"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dbinstanceclass"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Instance Class"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dbinstancestorage"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Storage"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "paytype"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pay Type"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "engine"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "DB Engine"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 177
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "DB Engine"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 11,
+        "y": 12
+      },
+      "id": 8,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "currentPage": 1,
+          "logEntries": 30,
+          "logsPerPage": 100,
+          "query": "dbinstancedescription:$project*  | SELECT dbinstancedescription, dbinstanceclass, dbinstancestorage, paytype, engine, count(1) as Count GROUP BY dbinstancedescription, dbinstanceclass, dbinstancestorage, paytype, engine",
+          "refId": "A",
+          "target": "dbinstancedescription, dbinstanceclass, dbinstancestorage, paytype, engine, Count",
+          "totalPages": 1,
+          "type": "table",
+          "ycol": "dbinstancedescription, dbinstanceclass, dbinstancestorage, paytype, engine, Count"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "RDS",
+      "type": "table"
+    },
+    {
+      "datasource": "mongodbLogService",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "DBInstanceDescription"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "name"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 0,
+        "y": 19
+      },
+      "id": 10,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "currentPage": 1,
+          "logEntries": 38,
+          "logsPerPage": 100,
+          "query": "DBInstanceDescription:$project* | SELECT DBInstanceDescription,DBInstanceType,DBInstanceId,DBInstanceClass,DBInstanceStorage,ChargeType,CreationTime,ExpireTime, count(1) as UsageTime group by DBInstanceDescription,DBInstanceType,DBInstanceId,DBInstanceClass,DBInstanceStorage,ChargeType,CreationTime,ExpireTime",
+          "refId": "A",
+          "target": "DBInstanceDescription,DBInstanceType,DBInstanceClass,DBInstanceStorage,ChargeType,ExpireTime,UsageTime",
+          "totalPages": 1,
+          "type": "table",
+          "ycol": "DBInstanceDescription,DBInstanceType,DBInstanceClass,DBInstanceStorage,ChargeType,ExpireTime,UsageTime"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "MongoDB",
+      "type": "table"
+    },
+    {
+      "datasource": "apigatewayLogService",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ResponseSize"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "deckbytes"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 11,
+        "y": 19
+      },
+      "id": 12,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "currentPage": 1,
+          "logEntries": 663,
+          "logsPerPage": 100,
+          "query": "* | SELECT apiGroupName, instanceId, COUNT(1) as Count, sum(responseSize) as ResponseSize GROUP BY apiGroupName, instanceId",
+          "refId": "A",
+          "target": "apiGroupName, instanceId, Count, ResponseSize",
+          "totalPages": 7,
+          "type": "table",
+          "ycol": "apiGroupName, instanceId, Count, ResponseSize"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "API Gaterway",
+      "type": "table"
+    },
+    {
+      "datasource": "SecretManagement",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 0,
+        "y": 27
+      },
+      "id": 14,
+      "options": {
+        "frameIndex": 0,
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "currentPage": 1,
+          "logEntries": 0,
+          "logsPerPage": 100,
+          "query": "namespace:$project*  |  SELECT  namespace, secret_management_name as name, count(1) as count group by name , namespace",
+          "refId": "A",
+          "target": "namespace,name,count",
+          "totalPages": 0,
+          "type": "table",
+          "ycol": "namespace,name,count"
+        },
+        {
+          "currentPage": 1,
+          "logEntries": 0,
+          "logsPerPage": 100,
+          "query": "",
+          "refId": "B",
+          "totalPages": 0,
+          "type": "table"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "SecretManagement",
+      "type": "table"
+    },
+    {
+      "datasource": "redisLogService",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bandwidth"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Bandwidth"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 11,
+        "y": 27
+      },
+      "id": 15,
+      "options": {
+        "frameIndex": 0,
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "currentPage": 1,
+          "logEntries": 144,
+          "logsPerPage": 100,
+          "query": "InstanceName:$project* |  SELECT  InstanceName,InstanceId, InstanceClass , max(Bandwidth) as bandwidth , DefaultBandWidth , count(1) as count group by InstanceName , InstanceId,InstanceClass,Bandwidth, DefaultBandWidth",
+          "refId": "A",
+          "target": "InstanceName,InstanceId,InstanceClass,bandwidth,count",
+          "totalPages": 2,
+          "type": "table",
+          "ycol": "InstanceName,InstanceId,InstanceClass,bandwidth,DefaultBandWidth,count"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Redis",
+      "type": "table"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 26,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "test",
+          "value": "test"
+        },
+        "datasource": "Openshift-Prometheus",
+        "definition": "label_values(kube_namespace_labels{label_kind=\"customer\"}, namespace)",
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Project",
+        "multi": false,
+        "name": "project",
+        "options": [
+          {
+            "selected": false,
+            "text": "test",
+            "value": "test"
+          },
+          {
+            "selected": true,
+            "text": "operators",
+            "value": "operators"
+          },
+          {
+            "selected": false,
+            "text": "test1",
+            "value": "test1"
+          }
+        ],
+        "query": "label_values(kube_namespace_labels{label_kind=\"customer\"}, namespace)",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Metering Of AliCloud",
+  "version": 57
+}
